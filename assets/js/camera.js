@@ -38,6 +38,8 @@ navigator.mediaDevices
   })
   .then(function (stream) {
     var video = document.querySelector("video");
+    video.setAttribute("playsinline", true);
+
     // 旧的浏览器可能没有 srcObject
     if ("srcObject" in video) {
       video.srcObject = stream;
