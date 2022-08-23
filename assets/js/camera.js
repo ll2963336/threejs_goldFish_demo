@@ -31,8 +31,9 @@ navigator.mediaDevices
   .getUserMedia({
     video: {
       frameRate: { ideal: 30, max: 60 },
-      width: window.innerWidth,
-      height: window.innerWidth,
+      facingMode: { exact: "environment" },
+      width: { min: 320, ideal: 480, max: 800 },
+      height: { min: 320 * aspect, ideal: 480 * aspect, max: 800 * aspect },
     },
   })
   .then(function (stream) {
