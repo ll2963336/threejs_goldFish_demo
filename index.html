@@ -159,7 +159,7 @@
       const loader = new GLTFLoader();
       let gltfModel = null;
       loader.load("./assets/fish/fish.glb", function (gltf) {
-        gltf.scene.scale.set(100, 100, 100);
+        gltf.scene.scale.set(25, 25, 25);
         gltf.scene.rotation.x = -0.5 * Math.PI;
         gltf.scene.rotation.y = -0.3 * Math.PI;
 
@@ -253,8 +253,8 @@
         line.position.x = px;
         cube.position.z = pz;
         line.position.z = pz;
-        // gltfModel.position.x = px;
-        // gltfModel.position.z = pz;
+        gltfModel.position.x = px;
+        gltfModel.position.z = pz;
       }
 
       function animate() {
