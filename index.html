@@ -12,24 +12,32 @@
     <title>Document</title>
   </head>
   <body style="margin: 0; overflow: hidden">
-    <button
-      id="start_demo"
-      style="
-        height: 100px;
-        width: 100px;
-        text-align: left;
-        background: rgba(0, 0, 0, 0.3);
-        position: absolute;
-        color: white;
-      "
-    >
-      Action
-      <div id="demo_x"></div>
-      <div id="demo_z"></div>
-      <div id="demo_cube_x"></div>
-      <div id="demo_cube_z"></div>
-      <div id="inner_width"></div>
-    </button>
+    <div id="three" style="position: relative; z-index: 100">
+      <button
+        id="start_demo"
+        style="
+          height: 100px;
+          width: 100px;
+          text-align: left;
+          background: rgba(0, 0, 0, 0.3);
+          position: absolute;
+          color: white;
+        "
+      >
+        Action
+        <div id="demo_x"></div>
+        <div id="demo_z"></div>
+        <div id="demo_cube_x"></div>
+        <div id="demo_cube_z"></div>
+        <div id="inner_width"></div>
+      </button>
+    </div>
+    <video
+      style="position: absolute; left: 0; top: 0; width: 100%; height: 100%"
+    />
+
+    <script src="./assets/js/camera.js"></script>
+
     <script>
       document.addEventListener(
         "touchmove",
@@ -81,17 +89,7 @@
 
       // let mixer;
 
-      const container = document.createElement("div");
-      document.body.appendChild(container);
-
-      // camera = new THREE.PerspectiveCamera(
-      //   45,
-      //   window.innerWidth / window.innerHeight,
-      //   1,
-      //   2000
-      // );
-      // camera.position.set(0, 500, 0);
-      // camera.rotation.x = -0.5 * Math.PI;
+      const container = document.getElementById("three");
 
       camera = new THREE.OrthographicCamera(
         -HALF_WINDOW_WIDTH,
@@ -106,12 +104,13 @@
       camera.rotation.x = -0.5 * Math.PI;
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xa0a0a0);
-      scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
+      scene.background = null;
+      // scene.background = new THREE.Color(0xa0a0a0);
+      // scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-      hemiLight.position.set(0, 2000, 0);
-      scene.add(hemiLight);
+      // const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+      // hemiLight.position.set(0, 2000, 0);
+      // scene.add(hemiLight);
 
       // cube
       const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_WIDTH);
@@ -129,30 +128,30 @@
       line.position.set(0, 5, 0);
       scene.add(line);
 
-      const dirLight = new THREE.DirectionalLight(0xffffff);
-      dirLight.position.set(0, 2000, 100);
-      dirLight.castShadow = true;
-      dirLight.shadow.camera.top = 180;
-      dirLight.shadow.camera.bottom = -100;
-      dirLight.shadow.camera.left = -120;
-      dirLight.shadow.camera.right = 120;
-      scene.add(dirLight);
+      // const dirLight = new THREE.DirectionalLight(0xffffff);
+      // dirLight.position.set(0, 2000, 100);
+      // dirLight.castShadow = true;
+      // dirLight.shadow.camera.top = 180;
+      // dirLight.shadow.camera.bottom = -100;
+      // dirLight.shadow.camera.left = -120;
+      // dirLight.shadow.camera.right = 120;
+      // scene.add(dirLight);
 
       // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
 
       // ground
-      const mesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 2000),
-        new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-      );
-      mesh.rotation.x = -Math.PI / 2;
-      mesh.receiveShadow = true;
-      scene.add(mesh);
+      // const mesh = new THREE.Mesh(
+      //   new THREE.PlaneGeometry(2000, 2000),
+      //   new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
+      // );
+      // mesh.rotation.x = -Math.PI / 2;
+      // mesh.receiveShadow = true;
+      // scene.add(mesh);
 
-      const grid = new THREE.GridHelper(1000, 20, 0x000000, 0x000000);
-      grid.material.opacity = 0.2;
-      grid.material.transparent = true;
-      scene.add(grid);
+      // const grid = new THREE.GridHelper(1000, 20, 0x000000, 0x000000);
+      // grid.material.opacity = 0.1;
+      // grid.material.transparent = true;
+      // scene.add(grid);
 
       // load gltf
       const loader = new GLTFLoader();
@@ -169,7 +168,9 @@
 
         scene.add(gltfModel);
       });
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+
+      renderer = new THREE.WebGLRenderer({ alpha: true });
+      renderer.setClearColor(0x000000, 0);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.shadowMap.enabled = true;
