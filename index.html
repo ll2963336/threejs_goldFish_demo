@@ -156,16 +156,15 @@
       // load gltf
       const loader = new GLTFLoader();
       let gltfModel = null;
-      loader.load("./assets/girl/scene.gltf", function (gltf) {
-        gltf.scene.scale.set(0.1, 0.1, 0.1);
-        gltf.scene.rotation.x = -0.5 * Math.PI;
+      loader.load("./assets/fish/fish.glb", function (gltf) {
+        // gltf.scene.scale.set(0.3, 0.3, 0.3);
+        // gltf.scene.rotation.x = -0.5 * Math.PI;
 
-        gltf.animations; // Array<THREE.AnimationClip>
-        gltf.scene; // THREE.Group
-        gltf.scenes; // Array<THREE.Group>
-        gltf.cameras; // Array<THREE.Camera>
+        mixer = new THREE.AnimationMixer(gltf.scene);
+        const action = mixer.clipAction(gltf.animations[0]);
+        action.play();
+
         gltfModel = gltf.scene;
-
         scene.add(gltfModel);
       });
 
