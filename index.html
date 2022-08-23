@@ -74,6 +74,8 @@
 
       let camera, scene, renderer, stats;
 
+      let mixer;
+
       let x = 0;
       let z = 0;
       let px = 0;
@@ -108,9 +110,9 @@
       // scene.background = new THREE.Color(0xa0a0a0);
       // scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
-      // const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-      // hemiLight.position.set(0, 2000, 0);
-      // scene.add(hemiLight);
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+      hemiLight.position.set(0, 2000, 0);
+      scene.add(hemiLight);
 
       // cube
       const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_WIDTH);
@@ -128,16 +130,16 @@
       line.position.set(0, 5, 0);
       scene.add(line);
 
-      // const dirLight = new THREE.DirectionalLight(0xffffff);
-      // dirLight.position.set(0, 2000, 100);
-      // dirLight.castShadow = true;
-      // dirLight.shadow.camera.top = 180;
-      // dirLight.shadow.camera.bottom = -100;
-      // dirLight.shadow.camera.left = -120;
-      // dirLight.shadow.camera.right = 120;
-      // scene.add(dirLight);
+      const dirLight = new THREE.DirectionalLight(0xffffff);
+      dirLight.position.set(0, 2000, 200);
+      dirLight.castShadow = true;
+      dirLight.shadow.camera.top = 180;
+      dirLight.shadow.camera.bottom = -100;
+      dirLight.shadow.camera.left = -120;
+      dirLight.shadow.camera.right = 120;
+      scene.add(dirLight);
 
-      // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
+      scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
 
       // ground
       // const mesh = new THREE.Mesh(
@@ -157,14 +159,17 @@
       const loader = new GLTFLoader();
       let gltfModel = null;
       loader.load("./assets/fish/fish.glb", function (gltf) {
-        // gltf.scene.scale.set(0.3, 0.3, 0.3);
-        // gltf.scene.rotation.x = -0.5 * Math.PI;
+        gltf.scene.scale.set(100, 100, 100);
+        gltf.scene.rotation.x = -0.5 * Math.PI;
+        gltf.scene.rotation.y = -0.3 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
-        const action = mixer.clipAction(gltf.animations[0]);
+        const action = mixer.clipAction(gltf.animations[7]);
+        console.log(gltf.animations);
         action.play();
 
         gltfModel = gltf.scene;
+        gltfModel.position.set(0, 0, 0);
         scene.add(gltfModel);
       });
 
@@ -248,16 +253,16 @@
         line.position.x = px;
         cube.position.z = pz;
         line.position.z = pz;
-        gltfModel.position.x = px;
-        gltfModel.position.z = pz;
+        // gltfModel.position.x = px;
+        // gltfModel.position.z = pz;
       }
 
       function animate() {
         requestAnimationFrame(animate);
 
         move();
-        // const delta = clock.getDelta();
-        // if (mixer) mixer.update(delta);
+        const delta = clock.getDelta();
+        if (mixer) mixer.update(delta);
         renderer.render(scene, camera);
         // stats.update();
       }
