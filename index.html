@@ -354,6 +354,7 @@
 
       function ClearCountdown() {
         if (time) {
+          actionElement.innerText = `重力感應`;
           clearInterval(time);
         }
       }
@@ -361,9 +362,10 @@
       function getWinGoal() {
         if (px < 50 && px > -50 && pz < 50 && pz > -50) {
           if (!time) {
-            Countdown(time);
+            Countdown();
           }
           if (countdown === 0) {
+            actionElement.innerText = `重力感應`;
             win_score_container.value = ++win_score;
             clearInterval(time);
             countdown = 3;
