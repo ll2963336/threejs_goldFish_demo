@@ -1,3 +1,7 @@
+.hidden {
+  display: hidden;
+}
+
 .input_score {
   width: 4rem;
   font-size: medium;
