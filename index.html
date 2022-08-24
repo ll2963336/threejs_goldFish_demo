@@ -62,6 +62,7 @@
         <div id="demo_z"></div>
         <div id="demo_cube_x"></div>
         <div id="demo_cube_z"></div>
+        <div id="countdown"></div>
       </div>
       <div
         style="
@@ -171,6 +172,9 @@
 
       let win_score = 0;
       let lose_score = 0;
+
+      let time = null;
+      let countdown = 3;
 
       const clock = new THREE.Clock();
 
@@ -309,7 +313,8 @@
           ).innerHTML = `px=${gltfModel.position.x.toFixed(2)}`;
           document.getElementById(
             "demo_cube_z"
-          ).innerHTML = `pz=${cgltfModelube.position.z.toFixed(2)}`;
+          ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
+          document.getElementById("countdown").innerHTML = `cd=${countdown}`;
         });
       };
       function move() {
@@ -344,8 +349,6 @@
       }
 
       // debounce
-      let time = null;
-      let countdown = 3;
       function Countdown() {
         time = setInterval(() => {
           actionElement.innerText = `捕捉中...${countdown}`;
