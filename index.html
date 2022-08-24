@@ -394,6 +394,22 @@
         }
       }
 
+      function getLoseGoal() {
+        if (
+          px > HALF_WINDOW_WIDTH - 2 ||
+          px > -HALF_WINDOW_WIDTH + 2 ||
+          pz > HALF_WINDOW_HEIGHT - 2 ||
+          pz > -HALF_WINDOW_HEIGHT + 2
+        ) {
+          lose_score_container = ++lose_score;
+          random_num = randomIntFromInterval(0, 2);
+          px = random_point[random_num][0];
+          pz = random_point[random_num][1];
+          gltfModel.position.x = px;
+          gltfModel.position.z = pz;
+        }
+      }
+
       function animate() {
         requestAnimationFrame(animate);
         move();
