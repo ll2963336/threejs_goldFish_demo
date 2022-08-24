@@ -34,15 +34,20 @@
     <div
       style="
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         background: transparent;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 0.2rem;
       "
     >
       <div
         style="
           background: transparent;
-          color: white;
           display: flex;
           flex-direction: column;
           justify-items: flex-start;
@@ -52,6 +57,25 @@
         <div id="demo_z">1</div>
         <div id="demo_cube_x">1</div>
         <div id="demo_cube_z">1</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column">
+        <input
+          disabled
+          class="input_score"
+          type="number"
+          name="lose_score"
+          id="lose_score"
+          value="0"
+        />
+        <input
+          disabled
+          class="input_score"
+          type="number"
+          name="win_score"
+          id="win_score"
+          value="0"
+        />
       </div>
     </div>
     <video

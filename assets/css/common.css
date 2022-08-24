@@ -1,3 +1,14 @@
+.input_score {
+  width: 4rem;
+  font-size: medium;
+  border-radius: 0.2rem;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  padding-left: 0.5rem;
+  margin-top: 0.3rem;
+}
+
 .win {
   color: rgb(51, 142, 51);
   font-weight: bold;
