@@ -28,12 +28,19 @@
       >
         開始
       </button>
-      <div>
+      <div
+        style="
+          background: transparent;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          justify-items: flex-start;
+        "
+      >
         <div id="demo_x"></div>
         <div id="demo_z"></div>
         <div id="demo_cube_x"></div>
         <div id="demo_cube_z"></div>
-        <div id="inner_width"></div>
       </div>
     </div>
     <video
@@ -233,9 +240,6 @@
             "demo_cube_x"
             // ).innerHTML = `px=${window.outerWidth}`;
           ).innerHTML = `px=${cube.position.x.toFixed(2)}`;
-          document.getElementById("inner_width").innerHTML = `iw=${
-            container.offsetWidth / 2
-          }`;
         });
       };
       function move() {
