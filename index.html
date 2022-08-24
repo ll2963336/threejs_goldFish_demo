@@ -63,6 +63,7 @@
         <div id="demo_cube_x"></div>
         <div id="demo_cube_z"></div>
         <div id="countdown"></div>
+        <div id="time"></div>
       </div>
       <div
         style="
@@ -315,6 +316,7 @@
             "demo_cube_z"
           ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
           document.getElementById("countdown").innerHTML = `cd=${countdown}`;
+          document.getElementById("time").innerHTML = `time=${time}`;
         });
       };
       function move() {
