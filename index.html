@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>GOLDFISH</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
@@ -8,29 +9,32 @@
       id="viewport"
       name="viewport"
     />
-
-    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/common.css" type="text/css" />
   </head>
   <body style="margin: 0; overflow: hidden">
     <div id="three" style="position: relative; z-index: 100">
       <button
         id="start_demo"
         style="
-          height: 100px;
-          width: 100px;
-          text-align: left;
+          height: 40px;
+          text-align: center;
           background: rgba(0, 0, 0, 0.3);
           position: absolute;
           color: white;
+          bottom: 5%;
+          left: 50%;
+          transform: translateX(-50%);
         "
       >
-        Action
+        開始
+      </button>
+      <div>
         <div id="demo_x"></div>
         <div id="demo_z"></div>
         <div id="demo_cube_x"></div>
         <div id="demo_cube_z"></div>
         <div id="inner_width"></div>
-      </button>
+      </div>
     </div>
     <video
       style="position: absolute; left: 0; top: 0; width: 100%; height: 100%"
@@ -66,26 +70,34 @@
     <script type="module">
       import * as THREE from "three";
 
-      import Stats from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/libs/stats.module.js";
+      import Stats from "./assets/js/stats.module.js";
 
       // import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/controls/OrbitControls.js";
       import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/FBXLoader.js";
-      import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/GLTFLoader.js";
+      // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/GLTFLoader.js";
+      import { GLTFLoader } from "./assets/js/GLTFLoader.js";
+      // import { FBXLoader } from "./assets/js/FBXLoader.js";
 
       let camera, scene, renderer, stats;
 
       let mixer;
+
+      const BOX_WIDTH = 10;
+      const HALF_WINDOW_WIDTH = window.innerWidth / 2;
+      const HALF_WINDOW_HEIGHT = window.innerHeight / 2;
+      const WINDOW_ASPECT = window.innerWidth / window.innerHeight;
+
+      const random_point = [
+        [-HALF_WINDOW_WIDTH, 0],
+        [0, HALF_WINDOW_HEIGHT],
+        [HALF_WINDOW_HEIGHT, 0],
+      ];
 
       let x = 0;
       let z = 0;
       let px = 0;
       let pz = 0;
       let speed_percent = 1 / 10;
-
-      const BOX_WIDTH = 10;
-      const HALF_WINDOW_WIDTH = window.innerWidth / 2;
-      const HALF_WINDOW_HEIGHT = window.innerHeight / 2;
-      const WINDOW_ASPECT = window.innerWidth / window.innerHeight;
 
       const clock = new THREE.Clock();
 
@@ -115,20 +127,20 @@
       scene.add(hemiLight);
 
       // cube
-      const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_WIDTH);
-      const material = new THREE.MeshBasicMaterial({ color: 0x999000 });
-      const cube = new THREE.Mesh(geometry, material);
-      cube.position.set(0, 5, 0);
-      scene.add(cube);
+      // const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_WIDTH);
+      // const material = new THREE.MeshBasicMaterial({ color: 0x999000 });
+      // const cube = new THREE.Mesh(geometry, material);
+      // cube.position.set(0, 5, 0);
+      // scene.add(cube);
 
       // cube border
-      const edges = new THREE.EdgesGeometry(geometry);
-      const line = new THREE.LineSegments(
-        edges,
-        new THREE.LineBasicMaterial({ color: 0x000000 })
-      );
-      line.position.set(0, 5, 0);
-      scene.add(line);
+      // const edges = new THREE.EdgesGeometry(geometry);
+      // const line = new THREE.LineSegments(
+      //   edges,
+      //   new THREE.LineBasicMaterial({ color: 0x000000 })
+      // );
+      // line.position.set(0, 5, 0);
+      // scene.add(line);
 
       const dirLight = new THREE.DirectionalLight(0xffffff);
       dirLight.position.set(0, 2000, 200);
@@ -159,17 +171,16 @@
       const loader = new GLTFLoader();
       let gltfModel = null;
       loader.load("./assets/fish/fish.glb", function (gltf) {
-        gltf.scene.scale.set(25, 25, 25);
-        gltf.scene.rotation.x = -0.5 * Math.PI;
-        gltf.scene.rotation.y = -0.3 * Math.PI;
+        gltfModel = gltf.scene;
+        console.log(gltfModel);
+        gltfModel.position.x = 100;
+        gltfModel.scale.set(25, 25, 25);
+        gltfModel.rotation.x = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
         const action = mixer.clipAction(gltf.animations[7]);
-        console.log(gltf.animations);
         action.play();
 
-        gltfModel = gltf.scene;
-        gltfModel.position.set(0, 0, 0);
         scene.add(gltfModel);
       });
 
@@ -205,6 +216,7 @@
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
           DeviceMotionEvent.requestPermission();
+          actionElement.classList.add("hidden");
         }
 
         window.addEventListener("deviceorientation", (event) => {
@@ -249,10 +261,10 @@
             pz += z;
           }
         }
-        cube.position.x = px;
-        line.position.x = px;
-        cube.position.z = pz;
-        line.position.z = pz;
+        // cube.position.x = px;
+        // line.position.x = px;
+        // cube.position.z = pz;
+        // line.position.z = pz;
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
       }
