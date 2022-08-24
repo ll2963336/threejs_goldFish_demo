@@ -59,27 +59,40 @@
         <div id="demo_cube_z">1</div>
       </div>
 
-      <div style="display: flex; flex-direction: column">
-        <input
-          disabled
-          class="input_score"
-          type="number"
-          name="lose_score"
-          id="lose_score"
-          value="0"
-        />
-        <input
-          disabled
-          class="input_score"
-          type="number"
-          name="win_score"
-          id="win_score"
-          value="0"
-        />
+      <div style="display: flex; flex-direction: column; align-items: flex-end">
+        <div>
+          <label for="lose_score">l: </label>
+          <input
+            disabled
+            class="input_score"
+            type="number"
+            name="lose_score"
+            id="lose_score"
+            value="0"
+          />
+        </div>
+        <div>
+          <label for="win_score">w: </label>
+          <input
+            disabled
+            class="input_score"
+            type="number"
+            name="win_score"
+            id="win_score"
+            value="0"
+          />
+        </div>
       </div>
     </div>
     <video
-      style="position: absolute; left: 0; top: 0; width: 100%; height: 100%"
+      style="
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -100;
+      "
     />
 
     <script src="./assets/js/camera.js"></script>
