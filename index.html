@@ -381,6 +381,12 @@
             clearInterval(time);
             countdown = 3;
             time = null;
+
+            random_num = randomIntFromInterval(0, 2);
+            px = random_point[random_num][0];
+            pz = random_point[random_num][1];
+            gltfModel.position.x = px;
+            gltfModel.position.z = pz;
           }
         } else {
           ClearCountdown();
