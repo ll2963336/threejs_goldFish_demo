@@ -154,7 +154,7 @@
       let x = 0;
       let z = 0;
       let px = 0;
-      let pz = 0;
+      let pz = -HALF_WINDOW_HEIGHT + 50;
       let speed_percent = 1 / 10;
 
       const clock = new THREE.Clock();
@@ -277,7 +277,7 @@
         window.addEventListener("deviceorientation", (event) => {
           // Expose each orientation angle in a more readable way
           if (event?.gamma) {
-            z = Number(event?.beta.toFixed(1)) * speed_percent;
+            z = Number(event?.beta.toFixed(1)) * speed_percent * 3;
           }
           if (event?.beta) {
             x = Number(event?.gamma.toFixed(1)) * speed_percent;
