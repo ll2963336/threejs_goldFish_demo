@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./assets/css/common.css" type="text/css" />
   </head>
   <body style="margin: 0; overflow: hidden">
+    <!-- three相關 -->
     <div id="three" style="position: relative; z-index: 100">
       <button
         id="start_demo"
@@ -31,6 +32,7 @@
         開始
       </button>
     </div>
+    <!-- 得分、座標顯示相關 -->
     <div
       style="
         position: absolute;
@@ -53,10 +55,10 @@
           justify-items: flex-start;
         "
       >
-        <div id="demo_x">1</div>
-        <div id="demo_z">1</div>
-        <div id="demo_cube_x">1</div>
-        <div id="demo_cube_z">1</div>
+        <div id="demo_x"></div>
+        <div id="demo_z"></div>
+        <div id="demo_cube_x"></div>
+        <div id="demo_cube_z"></div>
       </div>
 
       <div style="display: flex; flex-direction: column; align-items: flex-end">
@@ -84,6 +86,7 @@
         </div>
       </div>
     </div>
+    <!-- 相機背景相關 -->
     <video
       style="
         position: absolute;
@@ -203,7 +206,6 @@
       dirLight.shadow.camera.left = -120;
       dirLight.shadow.camera.right = 120;
       scene.add(dirLight);
-
       scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
 
       // ground
@@ -270,7 +272,7 @@
         ) {
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disable", true);
-          actionElement.innerText = "捕捉中";
+          actionElement.innerText = "重力感應";
         }
         window.addEventListener("deviceorientation", (event) => {
           // Expose each orientation angle in a more readable way
@@ -284,8 +286,10 @@
           document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
           document.getElementById(
             "demo_cube_x"
-            // ).innerHTML = `px=${window.outerWidth}`;
           ).innerHTML = `px=${cube.position.x.toFixed(2)}`;
+          document.getElementById(
+            "demo_cube_z"
+          ).innerHTML = `pz=${cube.position.z.toFixed(2)}`;
         });
       };
       function move() {
@@ -321,11 +325,32 @@
 
       // debounce
       let time = null;
-      function fishDebounce(params) {
+      let countdown = 3;
+      function Countdown() {
+        time = setInterval(() => {
+          actionElement.innerText = `捕捉中...${countdown}`;
+        }, 1000);
+      }
+
+      function ClearCountdown(params) {
         if (time) {
           clearInterval(time);
         }
-        time = setInterval(() => {}, 3000);
+        if (countdown === 0) {
+          clearInterval(time);
+          countdown = 3;
+        }
+      }
+
+      function getWinGoal() {
+        if (
+          px < HALF_WINDOW_WIDTH - BOX_WIDTH &&
+          px > -HALF_WINDOW_WIDTH + BOX_WIDTH &&
+          pz < HALF_WINDOW_HEIGHT &&
+          pz > -HALF_WINDOW_HEIGHT
+        ) {
+          Countdown();
+        }
       }
 
       function animate() {
