@@ -354,6 +354,7 @@
       function Countdown() {
         time = setInterval(() => {
           actionElement.innerText = `捕捉中...${countdown}`;
+          --countdown;
         }, 1000);
       }
 
@@ -361,6 +362,7 @@
         if (time) {
           actionElement.innerText = `重力感應`;
           clearInterval(time);
+          time = null;
         }
       }
 
@@ -374,6 +376,7 @@
             win_score_container.value = ++win_score;
             clearInterval(time);
             countdown = 3;
+            time = null;
           }
         } else {
           ClearCountdown();
