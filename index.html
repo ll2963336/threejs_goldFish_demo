@@ -113,6 +113,7 @@
     />
 
     <script src="./assets/js/camera.js"></script>
+    <script src="./assets/js/common.js"></script>
 
     <script>
       document.addEventListener(
@@ -160,16 +161,20 @@
       const WINDOW_ASPECT = window.innerWidth / window.innerHeight;
 
       const random_point = [
-        [-HALF_WINDOW_WIDTH, 0],
-        [0, HALF_WINDOW_HEIGHT],
-        [HALF_WINDOW_HEIGHT, 0],
+        [-HALF_WINDOW_WIDTH + 10, 0],
+        [0, -HALF_WINDOW_HEIGHT + 10],
+        [HALF_WINDOW_WIDTH - 10, 0],
       ];
 
       let x = 0;
       let z = 0;
       let px = 0;
-      let pz = -HALF_WINDOW_HEIGHT + 50;
+      let pz = 0;
       let speed_percent = 1 / 10;
+
+      let random_num = randomIntFromInterval(0, 2);
+      px = random_point[random_num][0];
+      pz = random_point[random_num][1];
 
       let win_score = 0;
       let lose_score = 0;
@@ -353,8 +358,7 @@
       // debounce
       function Countdown() {
         time = setInterval(() => {
-          actionElement.innerText = `捕捉中...${countdown}`;
-          --countdown;
+          actionElement.innerText = `捕捉中...${countdown--}`;
         }, 1000);
       }
 
@@ -371,7 +375,7 @@
           if (!time) {
             Countdown();
           }
-          if (countdown === 0) {
+          if (countdown === -1) {
             actionElement.innerText = `重力感應`;
             win_score_container.value = ++win_score;
             clearInterval(time);
