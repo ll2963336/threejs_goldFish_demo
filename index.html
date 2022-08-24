@@ -17,6 +17,8 @@
         id="start_demo"
         style="
           height: 40px;
+          width: 5rem;
+          border-radius: 0.5rem;
           text-align: center;
           background: rgba(0, 0, 0, 0.3);
           position: absolute;
@@ -28,6 +30,15 @@
       >
         開始
       </button>
+    </div>
+    <div
+      style="
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+      "
+    >
       <div
         style="
           background: transparent;
@@ -37,10 +48,10 @@
           justify-items: flex-start;
         "
       >
-        <div id="demo_x"></div>
-        <div id="demo_z"></div>
-        <div id="demo_cube_x"></div>
-        <div id="demo_cube_z"></div>
+        <div id="demo_x">1</div>
+        <div id="demo_z">1</div>
+        <div id="demo_cube_x">1</div>
+        <div id="demo_cube_z">1</div>
       </div>
     </div>
     <video
@@ -79,10 +90,10 @@
 
       import Stats from "./assets/js/stats.module.js";
 
-      // import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/controls/OrbitControls.js";
       import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/FBXLoader.js";
-      // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/GLTFLoader.js";
       import { GLTFLoader } from "./assets/js/GLTFLoader.js";
+      // import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/controls/OrbitControls.js";
+      // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/GLTFLoader.js";
       // import { FBXLoader } from "./assets/js/FBXLoader.js";
 
       let camera, scene, renderer, stats;
@@ -107,8 +118,6 @@
       let speed_percent = 1 / 10;
 
       const clock = new THREE.Clock();
-
-      // let mixer;
 
       const container = document.getElementById("three");
 
@@ -169,6 +178,7 @@
       // mesh.receiveShadow = true;
       // scene.add(mesh);
 
+      // grid
       // const grid = new THREE.GridHelper(1000, 20, 0x000000, 0x000000);
       // grid.material.opacity = 0.1;
       // grid.material.transparent = true;
@@ -211,7 +221,6 @@
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
@@ -223,9 +232,9 @@
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
           DeviceMotionEvent.requestPermission();
-          actionElement.classList.add("hidden");
+          actionElement.setAttribute("disable", true);
+          actionElement.innerText = "捕捉中";
         }
-
         window.addEventListener("deviceorientation", (event) => {
           // Expose each orientation angle in a more readable way
           if (event?.gamma) {
@@ -271,6 +280,15 @@
         // line.position.z = pz;
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
+      }
+
+      // debounce
+      let time = null;
+      function fishDebounce(params) {
+        if (time) {
+          clearInterval(time);
+        }
+        time = setInterval(() => {}, 3000);
       }
 
       function animate() {

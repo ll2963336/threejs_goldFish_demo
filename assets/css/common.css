@@ -1,3 +1,9 @@
-.hidden {
-  display: none;
+.win {
+  color: rgb(51, 142, 51);
+  font-weight: bold;
+}
+
+.lose {
+  color: rgb(215, 48, 48);
+  font-weight: bold;
 }
