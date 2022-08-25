@@ -190,6 +190,7 @@
       const container = document.getElementById("three");
       const win_score_container = document.getElementById("win_score");
       const lose_score_container = document.getElementById("lose_score");
+      const actionElement = document.getElementById("start_demo");
 
       win_score_container.value = win_score;
       lose_score_container.value = lose_score;
@@ -275,8 +276,9 @@
 
       function initPosition() {
         // init
-        if (isAutoMove) {
+        if (!isAutoMove) {
           isAutoMove = true;
+          actionElement.innerText = "自動移動中";
         }
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
@@ -292,7 +294,6 @@
       }
 
       // model移動相關
-      const actionElement = document.getElementById("start_demo");
       actionElement.onclick = () => {
         if (
           DeviceMotionEvent &&
@@ -303,7 +304,6 @@
 
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disabled", true);
-          actionElement.innerText = "自動移動中";
 
           window.addEventListener("deviceorientation", (event) => {
             if (event?.gamma) {
