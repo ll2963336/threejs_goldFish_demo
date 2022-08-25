@@ -229,8 +229,10 @@
         gltfModel.position.x = 0;
         gltfModel.scale.set(25, 25, 25);
         gltfModel.rotation.x = -0.25 * Math.PI;
+        gltfModel.rotation.y = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
+        console.log(gltf.animations);
         const action = mixer.clipAction(gltf.animations[7]);
         action.play();
 
@@ -287,7 +289,7 @@
           gltfModel.position.z = pz;
 
           DeviceMotionEvent.requestPermission();
-          actionElement.setAttribute("disable", true);
+          actionElement.setAttribute("disabled", true);
           actionElement.innerText = "自動移動中";
 
           window.addEventListener("deviceorientation", (event) => {
@@ -299,7 +301,7 @@
             }
           });
         } else {
-          actionElement.setAttribute("disable", true);
+          actionElement.setAttribute("disabled", true);
           actionElement.innerText = "設備不支持";
         }
       };
@@ -419,9 +421,9 @@
             autoMove();
             cancelAutoMove();
           } else {
-            // gravityMove();
-            // getWinGoal();
-            // getLoseGoal();
+            gravityMove();
+            getWinGoal();
+            getLoseGoal();
           }
         }
         const delta = clock.getDelta();
