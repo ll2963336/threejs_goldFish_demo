@@ -154,7 +154,7 @@
 
       let mixer, action;
 
-      const AUTOMOVE_LENGTH = 100;
+      const AUTOMOVE_LENGTH = 120;
       const OUTSIDE_LENGTH = 50;
       const HALF_WINDOW_WIDTH = window.innerWidth / 2;
       const HALF_WINDOW_HEIGHT = window.innerHeight / 2;
@@ -309,11 +309,13 @@
           actionElement.setAttribute("disabled", true);
 
           window.addEventListener("deviceorientation", (event) => {
-            if (event?.gamma) {
-              z = Number(event?.beta.toFixed(1)) * z_speed_percent;
-            }
-            if (event?.beta) {
-              x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
+            if (!isAutoMove) {
+              if (event?.gamma) {
+                z = Number(event?.beta.toFixed(1)) * z_speed_percent;
+              }
+              if (event?.beta) {
+                x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
+              }
             }
           });
         } else {
@@ -368,25 +370,8 @@
       }
 
       function gravityMove() {
-        if (px < HALF_WINDOW_WIDTH && px > -HALF_WINDOW_WIDTH) {
-          if (px + x >= HALF_WINDOW_WIDTH) {
-            px = HALF_WINDOW_WIDTH - 1;
-          } else if (px + x <= -HALF_WINDOW_WIDTH) {
-            px = -HALF_WINDOW_WIDTH + 1;
-          } else {
-            px += x;
-          }
-        }
-
-        if (pz < HALF_WINDOW_HEIGHT && pz > -HALF_WINDOW_HEIGHT) {
-          if (pz + z >= HALF_WINDOW_HEIGHT) {
-            pz = HALF_WINDOW_HEIGHT - 1;
-          } else if (pz + z <= -HALF_WINDOW_HEIGHT) {
-            pz = -HALF_WINDOW_HEIGHT + 1;
-          } else {
-            pz += z;
-          }
-        }
+        px += x;
+        pz += z;
 
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
