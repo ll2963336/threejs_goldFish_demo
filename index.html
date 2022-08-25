@@ -276,7 +276,7 @@
       function initPosition() {
         // init
         if (isAutoMove) {
-          isAutoMove = false;
+          isAutoMove = true;
         }
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
@@ -415,17 +415,13 @@
 
       function getLoseGoal() {
         if (
-          px > HALF_WINDOW_WIDTH - 2 ||
-          px < -HALF_WINDOW_WIDTH + 2 ||
-          pz > HALF_WINDOW_HEIGHT - 2 ||
-          pz < -HALF_WINDOW_HEIGHT + 2
+          px > HALF_WINDOW_WIDTH ||
+          px < -HALF_WINDOW_WIDTH ||
+          pz > HALF_WINDOW_HEIGHT ||
+          pz < -HALF_WINDOW_HEIGHT
         ) {
-          lose_score_container = ++lose_score;
-          random_num = randomIntFromInterval(0, 2);
-          px = random_point[random_num][0];
-          pz = random_point[random_num][1];
-          gltfModel.position.x = px;
-          gltfModel.position.z = pz;
+          lose_score_container.value = ++lose_score;
+          initPosition();
         }
       }
 
