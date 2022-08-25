@@ -256,7 +256,6 @@
       let gltfModel = null;
       loader.load("./assets/fish/fish.glb", function (gltf) {
         gltfModel = gltf.scene;
-        console.log(gltfModel);
         gltfModel.position.x = 0;
         gltfModel.scale.set(25, 25, 25);
         gltfModel.rotation.x = -0.25 * Math.PI;
@@ -286,7 +285,8 @@
       function displayLog() {
         if (
           DeviceMotionEvent &&
-          typeof DeviceMotionEvent.requestPermission === "function"
+          typeof DeviceMotionEvent.requestPermission === "function" &&
+          isBegin === true
         ) {
           document.getElementById("demo_x").innerHTML = `x = ${x.toFixed(1)}`;
           document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
@@ -308,6 +308,14 @@
           DeviceMotionEvent &&
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
+          // init
+          isBegin = true;
+          let random_num = randomIntFromInterval(0, 2);
+          px = random_point[random_num][0];
+          pz = random_point[random_num][1];
+          gltfModel.position.x = px;
+          gltfModel.position.z = pz;
+
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disable", true);
           actionElement.innerText = "自動移動中";
@@ -403,7 +411,7 @@
             countdown = 3;
             time = null;
 
-            random_num = randomIntFromInterval(0, 2);
+            let random_num = randomIntFromInterval(0, 2);
             px = random_point[random_num][0];
             pz = random_point[random_num][1];
             gltfModel.position.x = px;
@@ -433,6 +441,8 @@
       function animate() {
         requestAnimationFrame(animate);
         if (isBegin) {
+          displayLog();
+
           if (isAutoMove) {
             autoMove();
             cancelAutoMove();
