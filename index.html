@@ -171,6 +171,7 @@
 
       let isAutoMove = true;
       let isGravityMove = false;
+      let needAnimateChange = false;
       const autoMoveSpeed = 1;
       let autoMoveLog = 0;
       let x = 0;
@@ -186,7 +187,6 @@
       let time = null;
       let countdown = 4;
 
-      let animation_num = 7;
       const clock = new THREE.Clock();
 
       const container = document.getElementById("three");
@@ -236,7 +236,7 @@
         gltfModel.rotation.x = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
-        action = mixer.clipAction(gltf.animations[animation_num]);
+        action = mixer.clipAction(gltf.animations[7]);
         action.play();
 
         scene.add(gltfModel);
@@ -406,6 +406,7 @@
           if (countdown === -1) {
             actionElement.innerText = `捕捉成功`;
             isGravityMove = false;
+            needAnimateChange = true;
             x = 0;
             z = 0;
           }
@@ -450,10 +451,10 @@
             getLoseGoal();
           }
 
-          if (countdown === -1 && animation_num === 14) {
-            action = mixer.clipAction(gltf.animations[animation_num]);
+          if (countdown === -1 && needAnimateChange === true) {
+            action = mixer.clipAction(gltf.animations[13]);
             action.play();
-            animation_num = 7;
+            needAnimateChange = false;
           }
         }
         const delta = clock.getDelta();
