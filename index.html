@@ -165,6 +165,7 @@
         [0, -HALF_WINDOW_HEIGHT - OUTSIDE_LENGTH],
         [HALF_WINDOW_WIDTH + OUTSIDE_LENGTH, 0],
       ];
+      let random_num = 0;
 
       let isAutoMove = true;
       const autoMoveSpeed = 1;
@@ -210,22 +211,6 @@
       hemiLight.position.set(0, 2000, 0);
       scene.add(hemiLight);
 
-      // cube
-      // const geometry = new THREE.BoxGeometry(BOX_WIDTH, BOX_WIDTH, BOX_WIDTH);
-      // const material = new THREE.MeshBasicMaterial({ color: 0x999000 });
-      // const cube = new THREE.Mesh(geometry, material);
-      // cube.position.set(0, 5, 0);
-      // scene.add(cube);
-
-      // cube border
-      // const edges = new THREE.EdgesGeometry(geometry);
-      // const line = new THREE.LineSegments(
-      //   edges,
-      //   new THREE.LineBasicMaterial({ color: 0x000000 })
-      // );
-      // line.position.set(0, 5, 0);
-      // scene.add(line);
-
       const dirLight = new THREE.DirectionalLight(0xffffff);
       dirLight.position.set(0, 2000, 200);
       dirLight.castShadow = true;
@@ -235,21 +220,6 @@
       dirLight.shadow.camera.right = 120;
       scene.add(dirLight);
       scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
-
-      // ground
-      // const mesh = new THREE.Mesh(
-      //   new THREE.PlaneGeometry(2000, 2000),
-      //   new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-      // );
-      // mesh.rotation.x = -Math.PI / 2;
-      // mesh.receiveShadow = true;
-      // scene.add(mesh);
-
-      // grid
-      // const grid = new THREE.GridHelper(1000, 20, 0x000000, 0x000000);
-      // grid.material.opacity = 0.1;
-      // grid.material.transparent = true;
-      // scene.add(grid);
 
       // load gltf
       const loader = new GLTFLoader();
@@ -310,7 +280,7 @@
         ) {
           // init
           isBegin = true;
-          let random_num = randomIntFromInterval(0, 2);
+          random_num = randomIntFromInterval(0, 2);
           px = random_point[random_num][0];
           pz = random_point[random_num][1];
           gltfModel.position.x = px;
@@ -319,17 +289,19 @@
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disable", true);
           actionElement.innerText = "自動移動中";
-        }
-        window.addEventListener("deviceorientation", (event) => {
-          if (isAutoMove === false) {
+
+          window.addEventListener("deviceorientation", (event) => {
             if (event?.gamma) {
               z = Number(event?.beta.toFixed(1)) * z_speed_percent;
             }
             if (event?.beta) {
               x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
             }
-          }
-        });
+          });
+        } else {
+          actionElement.setAttribute("disable", true);
+          actionElement.innerText = "設備不支持";
+        }
       };
 
       function gravityMove() {
