@@ -152,7 +152,7 @@
 
       let camera, scene, renderer, stats;
 
-      let mixer;
+      let mixer, action;
 
       const AUTOMOVE_LENGTH = 100;
       const OUTSIDE_LENGTH = 50;
@@ -183,7 +183,7 @@
       let lose_score = 0;
 
       let time = null;
-      let countdown = 3;
+      let countdown = 4;
 
       const clock = new THREE.Clock();
 
@@ -233,8 +233,7 @@
         gltfModel.rotation.x = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
-        console.log(gltf.animations);
-        const action = mixer.clipAction(gltf.animations[7]);
+        action = mixer.clipAction(gltf.animations[7]);
         action.play();
 
         scene.add(gltfModel);
@@ -276,15 +275,15 @@
 
       function initPosition() {
         // init
+        if (isAutoMove) {
+          isAutoMove = false;
+        }
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
         pz = random_point[random_num][1];
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
         if (random_num === 0) {
-          gltfModel.rotation.y = 0.5 * Math.PI;
-        }
-        if (random_num === 1) {
           gltfModel.rotation.y = 0.5 * Math.PI;
         }
         if (random_num === 2) {
@@ -349,7 +348,10 @@
       // debounce
       function Countdown() {
         time = setInterval(() => {
-          actionElement.innerText = `捕捉中...${countdown--}`;
+          --countdown;
+          if (countdown >= 0) {
+            actionElement.innerText = `捕捉中...${countdown}`;
+          }
         }, 1000);
       }
 
@@ -358,7 +360,7 @@
           actionElement.innerText = `重力感應`;
           clearInterval(time);
           time = null;
-          countdown = 3;
+          countdown = 4;
         }
       }
 
@@ -392,18 +394,18 @@
           if (!time) {
             Countdown();
           }
-          if (countdown === -1) {
-            actionElement.innerText = `重力感應`;
-            win_score_container.value = ++win_score;
-            clearInterval(time);
-            countdown = 3;
-            time = null;
 
-            let random_num = randomIntFromInterval(0, 2);
-            px = random_point[random_num][0];
-            pz = random_point[random_num][1];
-            gltfModel.position.x = px;
-            gltfModel.position.z = pz;
+          if (countdown === -1) {
+            actionElement.innerText = `捕捉成功`;
+            win_score_container.value = ++win_score;
+            action = mixer.clipAction(gltf.animations[13]);
+            action.play();
+          }
+
+          if (countdown === -4) {
+            clearInterval(time);
+            countdown = 4;
+            time = null;
           }
         } else {
           ClearCountdown();
