@@ -303,7 +303,7 @@
 
       // model移動相關
       const actionElement = document.getElementById("start_demo");
-      actionElement.onclick = function () {
+      actionElement.onclick = () => {
         if (
           DeviceMotionEvent &&
           typeof DeviceMotionEvent.requestPermission === "function"
@@ -447,9 +447,9 @@
             autoMove();
             cancelAutoMove();
           } else {
-            gravityMove();
-            getWinGoal();
-            getLoseGoal();
+            // gravityMove();
+            // getWinGoal();
+            // getLoseGoal();
           }
         }
         const delta = clock.getDelta();
