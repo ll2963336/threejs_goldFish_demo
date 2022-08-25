@@ -453,9 +453,8 @@
             getLoseGoal();
           }
 
-          if (countdown === -1 && needAnimateChange === true) {
-            action = mixer.clipAction(gltf.animations[13]);
-            action.play();
+          if (countdown === -2 && needAnimateChange === true) {
+            mixer.clipAction(gltf.animations[13]).play();
             needAnimateChange = false;
           }
         }
