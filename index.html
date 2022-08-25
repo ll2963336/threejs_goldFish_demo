@@ -170,6 +170,7 @@
       let random_num = 0;
 
       let isAutoMove = true;
+      let isGravityMove = false;
       const autoMoveSpeed = 1;
       let autoMoveLog = 0;
       let x = 0;
@@ -281,6 +282,8 @@
           isAutoMove = true;
           actionElement.innerText = "自動移動中";
         }
+        x = 0;
+        z = 0;
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
         pz = random_point[random_num][1];
@@ -311,7 +314,7 @@
           actionElement.setAttribute("disabled", true);
 
           window.addEventListener("deviceorientation", (event) => {
-            if (!isAutoMove) {
+            if (!isAutoMove && isGravityMove) {
               if (event?.gamma) {
                 z = Number(event?.beta.toFixed(1)) * z_speed_percent;
               }
@@ -346,6 +349,7 @@
         if (autoMoveLog > 100) {
           autoMoveLog = 0;
           isAutoMove = false;
+          isGravityMove = true;
           actionElement.innerText = "重力感應中";
         }
       }
@@ -401,6 +405,9 @@
 
           if (countdown === -1) {
             actionElement.innerText = `捕捉成功`;
+            isGravityMove = false;
+            x = 0;
+            z = 0;
           }
 
           if (countdown === -4) {
