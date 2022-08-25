@@ -301,6 +301,7 @@
         if (
           DeviceMotionEvent &&
           typeof DeviceMotionEvent.requestPermission === "function"
+          // true
         ) {
           isBegin = true;
           initPosition();
@@ -385,7 +386,7 @@
 
           if (countdown === -1) {
             actionElement.innerText = `捕捉成功`;
-            mixer.clipAction(gltf.animations[13]);
+            action = mixer.clipAction(gltf.animations[13]);
             action.play();
           }
 
