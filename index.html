@@ -159,6 +159,8 @@
       const HALF_WINDOW_WIDTH = window.innerWidth / 2;
       const HALF_WINDOW_HEIGHT = window.innerHeight / 2;
       const WINDOW_ASPECT = window.innerWidth / window.innerHeight;
+      const MIN_ROTATION_VALUE = -Math.PI;
+      const MAX_ROTATION_VALUE = Math.PI;
 
       const random_point = [
         [-HALF_WINDOW_WIDTH - OUTSIDE_LENGTH, 0],
@@ -229,7 +231,6 @@
         gltfModel.position.x = 0;
         gltfModel.scale.set(25, 25, 25);
         gltfModel.rotation.x = -0.25 * Math.PI;
-        gltfModel.rotation.y = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
         console.log(gltf.animations);
@@ -273,6 +274,24 @@
         }
       }
 
+      function initPosition() {
+        // init
+        random_num = randomIntFromInterval(0, 2);
+        px = random_point[random_num][0];
+        pz = random_point[random_num][1];
+        gltfModel.position.x = px;
+        gltfModel.position.z = pz;
+        if (random_num === 0) {
+          gltfModel.rotation.y = 0.5 * Math.PI;
+        }
+        if (random_num === 1) {
+          gltfModel.rotation.y = 0.5 * Math.PI;
+        }
+        if (random_num === 2) {
+          gltfModel.rotation.y = -0.5 * Math.PI;
+        }
+      }
+
       // model移動相關
       const actionElement = document.getElementById("start_demo");
       actionElement.onclick = () => {
@@ -280,13 +299,8 @@
           DeviceMotionEvent &&
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
-          // init
           isBegin = true;
-          random_num = randomIntFromInterval(0, 2);
-          px = random_point[random_num][0];
-          pz = random_point[random_num][1];
-          gltfModel.position.x = px;
-          gltfModel.position.z = pz;
+          initPosition();
 
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disabled", true);
@@ -305,31 +319,6 @@
           actionElement.innerText = "設備不支持";
         }
       };
-
-      function gravityMove() {
-        if (px < HALF_WINDOW_WIDTH && px > -HALF_WINDOW_WIDTH) {
-          if (px + x >= HALF_WINDOW_WIDTH) {
-            px = HALF_WINDOW_WIDTH - 1;
-          } else if (px + x <= -HALF_WINDOW_WIDTH) {
-            px = -HALF_WINDOW_WIDTH + 1;
-          } else {
-            px += x;
-          }
-        }
-
-        if (pz < HALF_WINDOW_HEIGHT && pz > -HALF_WINDOW_HEIGHT) {
-          if (pz + z >= HALF_WINDOW_HEIGHT) {
-            pz = HALF_WINDOW_HEIGHT - 1;
-          } else if (pz + z <= -HALF_WINDOW_HEIGHT) {
-            pz = -HALF_WINDOW_HEIGHT + 1;
-          } else {
-            pz += z;
-          }
-        }
-
-        gltfModel.position.x = px;
-        gltfModel.position.z = pz;
-      }
 
       function autoMove() {
         if (random_num === 0) {
@@ -371,6 +360,31 @@
           time = null;
           countdown = 3;
         }
+      }
+
+      function gravityMove() {
+        if (px < HALF_WINDOW_WIDTH && px > -HALF_WINDOW_WIDTH) {
+          if (px + x >= HALF_WINDOW_WIDTH) {
+            px = HALF_WINDOW_WIDTH - 1;
+          } else if (px + x <= -HALF_WINDOW_WIDTH) {
+            px = -HALF_WINDOW_WIDTH + 1;
+          } else {
+            px += x;
+          }
+        }
+
+        if (pz < HALF_WINDOW_HEIGHT && pz > -HALF_WINDOW_HEIGHT) {
+          if (pz + z >= HALF_WINDOW_HEIGHT) {
+            pz = HALF_WINDOW_HEIGHT - 1;
+          } else if (pz + z <= -HALF_WINDOW_HEIGHT) {
+            pz = -HALF_WINDOW_HEIGHT + 1;
+          } else {
+            pz += z;
+          }
+        }
+
+        gltfModel.position.x = px;
+        gltfModel.position.z = pz;
       }
 
       function getWinGoal() {
