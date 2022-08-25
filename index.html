@@ -385,12 +385,12 @@
 
           if (countdown === -1) {
             actionElement.innerText = `捕捉成功`;
-            win_score_container.value = ++win_score;
-            action = mixer.clipAction(gltf.animations[13]);
+            mixer.clipAction(gltf.animations[13]);
             action.play();
           }
 
           if (countdown === -4) {
+            win_score_container.value = ++win_score;
             initPosition();
             clearInterval(time);
             countdown = 4;
