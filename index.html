@@ -147,34 +147,34 @@
 
       import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/FBXLoader.js";
       import { GLTFLoader } from "./assets/js/GLTFLoader.js";
-      // import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/controls/OrbitControls.js";
-      // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/GLTFLoader.js";
-      // import { FBXLoader } from "./assets/js/FBXLoader.js";
+
+      let isBegin = false;
 
       let camera, scene, renderer, stats;
 
       let mixer;
 
-      const BOX_WIDTH = 10;
+      const AUTOMOVE_LENGTH = 100;
+      const OUTSIDE_LENGTH = 50;
       const HALF_WINDOW_WIDTH = window.innerWidth / 2;
       const HALF_WINDOW_HEIGHT = window.innerHeight / 2;
       const WINDOW_ASPECT = window.innerWidth / window.innerHeight;
 
       const random_point = [
-        [-HALF_WINDOW_WIDTH + 20, 0],
-        [0, -HALF_WINDOW_HEIGHT + 20],
-        [HALF_WINDOW_WIDTH - 20, 0],
+        [-HALF_WINDOW_WIDTH - OUTSIDE_LENGTH, 0],
+        [0, -HALF_WINDOW_HEIGHT - OUTSIDE_LENGTH],
+        [HALF_WINDOW_WIDTH + OUTSIDE_LENGTH, 0],
       ];
 
+      let isAutoMove = true;
+      const autoMoveSpeed = 1;
+      let autoMoveLog = 0;
       let x = 0;
       let z = 0;
       let px = 0;
       let pz = 0;
-      let speed_percent = 1 / 10;
-
-      let random_num = randomIntFromInterval(0, 2);
-      px = random_point[random_num][0];
-      pz = random_point[random_num][1];
+      let x_speed_percent = 1 / 10;
+      let z_speed_percent = 1 / 30;
 
       let win_score = 0;
       let lose_score = 0;
@@ -205,8 +205,6 @@
 
       scene = new THREE.Scene();
       scene.background = null;
-      // scene.background = new THREE.Color(0xa0a0a0);
-      // scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
       const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
       hemiLight.position.set(0, 2000, 0);
@@ -259,7 +257,7 @@
       loader.load("./assets/fish/fish.glb", function (gltf) {
         gltfModel = gltf.scene;
         console.log(gltfModel);
-        gltfModel.position.x = 100;
+        gltfModel.position.x = 0;
         gltfModel.scale.set(25, 25, 25);
         gltfModel.rotation.x = -0.25 * Math.PI;
 
@@ -277,20 +275,30 @@
       renderer.shadowMap.enabled = true;
       container.appendChild(renderer.domElement);
 
-      // const controls = new OrbitControls(camera, renderer.domElement);
-      // controls.target.set(0, 100, 0);
-      // controls.update();
-
       window.addEventListener("resize", onWindowResize);
-
-      // stats
-      // stats = new Stats();
-      // container.appendChild(stats.dom);
 
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      function displayLog() {
+        if (
+          DeviceMotionEvent &&
+          typeof DeviceMotionEvent.requestPermission === "function"
+        ) {
+          document.getElementById("demo_x").innerHTML = `x = ${x.toFixed(1)}`;
+          document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
+          document.getElementById(
+            "demo_cube_x"
+          ).innerHTML = `px=${gltfModel.position.x.toFixed(2)}`;
+          document.getElementById(
+            "demo_cube_z"
+          ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
+          document.getElementById("countdown").innerHTML = `cd=${countdown}`;
+          document.getElementById("time").innerHTML = `time=${time}`;
+        }
       }
 
       // model移動相關
@@ -302,29 +310,21 @@
         ) {
           DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disable", true);
-          actionElement.innerText = "重力感應";
+          actionElement.innerText = "自動移動中";
         }
         window.addEventListener("deviceorientation", (event) => {
-          // Expose each orientation angle in a more readable way
-          if (event?.gamma) {
-            z = Number(event?.beta.toFixed(1)) * speed_percent * 3;
+          if (isAutoMove === false) {
+            if (event?.gamma) {
+              z = Number(event?.beta.toFixed(1)) * z_speed_percent;
+            }
+            if (event?.beta) {
+              x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
+            }
           }
-          if (event?.beta) {
-            x = Number(event?.gamma.toFixed(1)) * speed_percent;
-          }
-          document.getElementById("demo_x").innerHTML = `x = ${x.toFixed(1)}`;
-          document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
-          document.getElementById(
-            "demo_cube_x"
-          ).innerHTML = `px=${gltfModel.position.x.toFixed(2)}`;
-          document.getElementById(
-            "demo_cube_z"
-          ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
-          document.getElementById("countdown").innerHTML = `cd=${countdown}`;
-          document.getElementById("time").innerHTML = `time=${time}`;
         });
       };
-      function move() {
+
+      function gravityMove() {
         if (px < HALF_WINDOW_WIDTH && px > -HALF_WINDOW_WIDTH) {
           if (px + x >= HALF_WINDOW_WIDTH) {
             px = HALF_WINDOW_WIDTH - 1;
@@ -344,12 +344,35 @@
             pz += z;
           }
         }
-        // cube.position.x = px;
-        // line.position.x = px;
-        // cube.position.z = pz;
-        // line.position.z = pz;
+
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
+      }
+
+      function autoMove() {
+        if (random_num === 0) {
+          px += autoMoveSpeed;
+          autoMoveLog += autoMoveSpeed;
+        }
+        if (random_num === 1) {
+          pz += autoMoveSpeed;
+          autoMoveLog += autoMoveSpeed;
+        }
+        if (random_num === 2) {
+          px -= autoMoveSpeed;
+          autoMoveLog += autoMoveSpeed;
+        }
+
+        gltfModel.position.x = px;
+        gltfModel.position.z = pz;
+      }
+
+      function cancelAutoMove() {
+        if (autoMoveLog > 100) {
+          autoMoveLog = 0;
+          isAutoMove = false;
+          actionElement.innerText = "重力感應中";
+        }
       }
 
       // debounce
@@ -409,9 +432,16 @@
 
       function animate() {
         requestAnimationFrame(animate);
-        move();
-        getWinGoal();
-        getLoseGoal();
+        if (isBegin) {
+          if (isAutoMove) {
+            autoMove();
+            cancelAutoMove();
+          } else {
+            gravityMove();
+            getWinGoal();
+            getLoseGoal();
+          }
+        }
         const delta = clock.getDelta();
         if (mixer) mixer.update(delta);
         renderer.render(scene, camera);
