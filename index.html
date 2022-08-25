@@ -300,14 +300,14 @@
       // model移動相關
       actionElement.onclick = () => {
         if (
-          // DeviceMotionEvent &&
-          // typeof DeviceMotionEvent.requestPermission === "function"
-          true
+          DeviceMotionEvent &&
+          typeof DeviceMotionEvent.requestPermission === "function"
+          // true
         ) {
           isBegin = true;
           initPosition();
 
-          // DeviceMotionEvent.requestPermission();
+          DeviceMotionEvent.requestPermission();
           actionElement.setAttribute("disabled", true);
 
           window.addEventListener("deviceorientation", (event) => {
@@ -325,7 +325,6 @@
           actionElement.innerText = "設備不支持";
         }
       };
-
       function autoMove() {
         if (random_num === 0) {
           px += autoMoveSpeed;
@@ -343,12 +342,27 @@
         gltfModel.position.x = px;
         gltfModel.position.z = pz;
       }
-
       function cancelAutoMove() {
         if (autoMoveLog > 100) {
           autoMoveLog = 0;
           isAutoMove = false;
           actionElement.innerText = "重力感應中";
+        }
+      }
+
+      // rotation
+      function fixedRotation() {
+        if (x > 0 && z > 0) {
+          gltfModel.rotation.y = 0.25 * Math.PI;
+        }
+        if (x > 0 && z < 0) {
+          gltfModel.rotation.y = 0.75 * Math.PI;
+        }
+        if (x < 0 && z > 0) {
+          gltfModel.rotation.y = -0.25 * Math.PI;
+        }
+        if (x < 0 && z < 0) {
+          gltfModel.rotation.y = -0.75 * Math.PI;
         }
       }
 
@@ -419,7 +433,7 @@
         requestAnimationFrame(animate);
         if (isBegin) {
           displayLog();
-
+          fixedRotation();
           if (isAutoMove) {
             autoMove();
             cancelAutoMove();
