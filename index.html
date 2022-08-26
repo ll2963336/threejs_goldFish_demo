@@ -176,7 +176,7 @@
 
       let camera, scene, renderer, stats;
 
-      let mixer, action;
+      let mixer, actions;
 
       const AUTOMOVE_LENGTH = 120;
       const OUTSIDE_LENGTH = 50;
@@ -204,6 +204,8 @@
       let pz = 0;
       let x_speed_percent = 1 / 10;
       let z_speed_percent = 1 / 30;
+
+      let swimAction, dieAction;
 
       let win_score = 0;
       let lose_score = 0;
@@ -255,17 +257,18 @@
       let gltfModel = null;
       loader.load("./assets/fish/fish.glb", function (gltf) {
         gltfModel = gltf.scene;
+        scene.add(gltfModel);
         gltfModel.position.x = 0;
         gltfModel.scale.set(25, 25, 25);
         gltfModel.rotation.x = -0.25 * Math.PI;
 
         mixer = new THREE.AnimationMixer(gltf.scene);
-        action = mixer.clipAction(gltf.animations[7]);
-        action.play();
+        swimAction = mixer.clipAction(gltf.animations[7]);
+        dieAction = mixer.clipAction(gltf.animations[13]);
+        actions = [dieAction, swimAction];
 
-        scene.add(gltfModel);
+        actions[1].play();
       });
-
       renderer = new THREE.WebGLRenderer({ alpha: true });
       renderer.setClearColor(0x000000, 0);
       renderer.setPixelRatio(window.devicePixelRatio);
@@ -310,6 +313,8 @@
         }
         x = 0;
         z = 0;
+        actions[0].stop();
+        actions[1].play();
         needAnimateChange = false;
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
@@ -432,6 +437,8 @@
 
           if (countdown === -1) {
             actionElement.innerText = `捕捉成功`;
+            actions[0].play();
+            actions[1].stop();
             isGravityMove = false;
             needAnimateChange = true;
             x = 0;
