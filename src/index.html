@@ -237,7 +237,7 @@
       // load gltf
       const loader = new GLTFLoader();
       let gltfModel = null;
-      loader.load("./assets/fish/fish.glb", function (gltf) {
+      loader.load("fish.glb", function (gltf) {
         gltfModel = gltf.scene;
         scene.add(gltfModel);
         gltfModel.position.x = 0;
