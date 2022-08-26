@@ -195,7 +195,6 @@
 
       let isAutoMove = true;
       let isGravityMove = false;
-      let needAnimateChange = false;
       const autoMoveSpeed = 1;
       let autoMoveLog = 0;
       let x = 0;
@@ -299,9 +298,6 @@
             "demo_cube_z"
           ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
           document.getElementById("countdown").innerHTML = `cd=${countdown}`;
-          document.getElementById(
-            "needAnimateChange"
-          ).innerHTML = `NAC=${needAnimateChange}`;
         }
       }
 
@@ -315,7 +311,6 @@
         z = 0;
         actions[0].stop();
         actions[1].play();
-        needAnimateChange = false;
         random_num = randomIntFromInterval(0, 2);
         px = random_point[random_num][0];
         pz = random_point[random_num][1];
@@ -440,7 +435,6 @@
             actions[0].play();
             actions[1].stop();
             isGravityMove = false;
-            needAnimateChange = true;
             x = 0;
             z = 0;
           }
@@ -483,11 +477,6 @@
             gravityMove();
             getWinGoal();
             getLoseGoal();
-          }
-
-          if (countdown === -2 && needAnimateChange === true) {
-            mixer.clipAction(gltf.animations[13]).play();
-            needAnimateChange = false;
           }
         }
         const delta = clock.getDelta();
