@@ -1,0 +1,27 @@
+{
+  "name": "threejs_goldfish_demo",
+  "version": "1.0.0",
+  "description": "金魚佬",
+  "source": "src/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withcloud/threejs_goldFish_demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/withcloud/threejs_goldFish_demo/issues"
+  },
+  "devDependencies": {
+    "@parcel/optimizer-esbuild": "^2.7.0",
+    "@rbf/parcel-optimizer-javascript-obfuscator": "^0.2.2",
+    "parcel": "^2.0.0"
+  },
+  "homepage": "https://github.com/withcloud/threejs_goldFish_demo#readme"
+}

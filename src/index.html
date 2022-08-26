@@ -86,8 +86,6 @@
           opacity: 60%;
           transform: translate(-62%, -17%) rotateZ(120deg);
         "
-        alt=""
-        srcset=""
       />
 
       <div style="display: flex; flex-direction: column; align-items: flex-end">
@@ -140,25 +138,21 @@
       );
     </script>
 
-    <script
-      async
-      src="https://cdn.jsdelivr.net/npm/es-module-shims@1.3.6/dist/es-module-shims.js"
-    ></script>
+    <script async src="./assets/js/es-module-shims.js"></script>
 
-    <script type="importmap">
+    <script async type="importmap">
       {
         "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.143.0/build/three.module.js"
+          "three": "./assets/js/three.js"
         }
       }
     </script>
 
     <script type="module">
-      import * as THREE from "three";
+      import * as THREE from "./assets/js/three.js";
 
       import Stats from "./assets/js/stats.module.js";
 
-      import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.143.0/examples/jsm/loaders/FBXLoader.js";
       import { GLTFLoader } from "./assets/js/GLTFLoader.js";
 
       let isBegin = false;
