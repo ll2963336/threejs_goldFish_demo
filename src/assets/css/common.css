@@ -2,8 +2,77 @@
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
 .hidden {
   display: hidden;
+}
+/* 第一層 */
+.first_container {
+  position: relative;
+  z-index: 100;
+}
+
+/* 開始按鈕 */
+.start_button {
+  height: 40px;
+  width: 5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  color: white;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.win {
+  color: rgb(51, 142, 51);
+  font-weight: bold;
+}
+
+.lose {
+  color: rgb(215, 48, 48);
+  font-weight: bold;
+}
+
+/* 第二層 */
+.cecond_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  right: 0;
+  background: transparent;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0.2rem;
+  border: rgba(128, 128, 128, 0.236) 0.5rem solid;
+}
+
+.fishing_net_image {
+  position: absolute;
+  width: 300px;
+  left: 50%;
+  top: 50%;
+  opacity: 60%;
+  transform: translate(-62%, -17%) rotateZ(120deg);
+}
+
+.fishing_net_cubeCenter {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  background: rgba(128, 128, 128, 0.236);
+  transform: translate(-50%, -50%);
 }
 
 .input_score {
@@ -17,12 +86,12 @@
   margin-top: 0.3rem;
 }
 
-.win {
-  color: rgb(51, 142, 51);
-  font-weight: bold;
-}
-
-.lose {
-  color: rgb(215, 48, 48);
-  font-weight: bold;
+/* 第三層 */
+.third_container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
 }
