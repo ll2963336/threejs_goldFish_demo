@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: hidden;
+}
+
+.input_score {
+  width: 4rem;
+  color: #fff;
+  background: #0000004d;
+  border: none;
+  border-radius: .2rem;
+  margin-top: .3rem;
+  padding-left: .5rem;
+  font-size: medium;
+}
+
+.win {
+  color: #338e33;
+  font-weight: bold;
+}
+
+.lose {
+  color: #d73030;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=index.a74ff354.css.map */

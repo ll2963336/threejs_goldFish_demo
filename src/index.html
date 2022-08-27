@@ -44,27 +44,11 @@
         background: transparent;
         color: white;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         padding: 0 0.2rem;
         border: rgba(128, 128, 128, 0.236) 0.5rem solid;
       "
     >
-      <div
-        style="
-          background: transparent;
-          display: flex;
-          flex-direction: column;
-          justify-items: flex-start;
-        "
-      >
-        <div id="demo_x"></div>
-        <div id="demo_z"></div>
-        <div id="demo_cube_x"></div>
-        <div id="demo_cube_z"></div>
-        <div id="countdown"></div>
-        <div id="needAnimateChange"></div>
-      </div>
-
       <div
         style="
           position: absolute;
@@ -266,24 +250,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
-      function displayLog() {
-        if (
-          DeviceMotionEvent &&
-          typeof DeviceMotionEvent.requestPermission === "function" &&
-          isBegin === true
-        ) {
-          document.getElementById("demo_x").innerHTML = `x = ${x.toFixed(1)}`;
-          document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
-          document.getElementById(
-            "demo_cube_x"
-          ).innerHTML = `px=${gltfModel.position.x.toFixed(2)}`;
-          document.getElementById(
-            "demo_cube_z"
-          ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
-          document.getElementById("countdown").innerHTML = `cd=${countdown}`;
-        }
-      }
-
       function initPosition() {
         // init
         if (!isAutoMove) {
@@ -451,7 +417,6 @@
       function animate() {
         requestAnimationFrame(animate);
         if (isBegin) {
-          displayLog();
           fixedRotation();
           if (isAutoMove) {
             autoMove();
