@@ -1,0 +1,24 @@
+"compact": true,
+"controlFlowFlattening": false,
+"deadCodeInjection": false,
+"debugProtection": false,
+"disableConsoleOutput": false,
+"forceTransformStrings": [],
+"inputFileName": "",
+"selfDefending": false,
+"simplify": true,
+"sourceMap": false,
+"splitStrings": true,
+"splitStringsChunkLength": 10,
+"stringArray": true,
+"stringArrayCallsTransform": true,
+"stringArrayCallsTransformThreshold": 0.5,
+"stringArrayEncoding": ["base64", "rc4"],
+"stringArrayIndexesType": ["hexadecimal-number"],
+
+"optimizers": {
+  "*.js": [
+    "@parcel/optimizer-esbuild",
+    "@rbf/parcel-optimizer-javascript-obfuscator"
+  ]
+}
