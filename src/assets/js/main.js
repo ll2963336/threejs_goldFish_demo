@@ -216,6 +216,11 @@ function initPosition() {
   }
 }
 
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 // model移動相關
 startButtonElement.onclick = async () => {
   if (!isPermission) {
