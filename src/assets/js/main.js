@@ -4,6 +4,7 @@ import { GLTFLoader } from "./GLTFLoader.js";
 
 let isBegin = false;
 let isMobile = false;
+let isPermission = false;
 
 let camera, scene, renderer;
 
@@ -54,7 +55,7 @@ win_score_container.value = win_score;
 lose_score_container.value = lose_score;
 
 // 檢測是否為移動端手機
-function getUseAgentDetection() {
+(function getUseAgentDetection() {
   if (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
@@ -76,8 +77,56 @@ function getUseAgentDetection() {
       hideAfter: false,
     });
   }
+})();
+
+(async function getOrientationPermission() {
+  if (typeof DeviceMotionEvent.requestPermission === "function") {
+    // ios
+    getIOSOrientationPermission();
+  } else {
+    // other
+    isPermission = true;
+    addOrientationListener();
+  }
+})();
+
+async function getIOSOrientationPermission() {
+  await DeviceMotionEvent.requestPermission()
+    .then((permissionState) => {
+      if (permissionState === "granted") {
+        isPermission = true;
+      } else {
+        isPermission = false;
+      }
+    })
+    .catch(console.error);
+
+  if (isPermission) {
+    addOrientationListener();
+  } else {
+    $.toast({
+      heading: "Message",
+      text: "閣下拒絕本遊戲獲取重力感應數據請求：(",
+      showHideTransition: "slide",
+      position: "top-left",
+      stack: 1,
+      icon: "info",
+    });
+  }
 }
-getUseAgentDetection();
+
+function addOrientationListener() {
+  window.addEventListener("deviceorientation", (event) => {
+    if (!isAutoMove && isGravityMove) {
+      if (event?.gamma) {
+        z = Number(event?.beta.toFixed(1)) * z_speed_percent;
+      }
+      if (event?.beta) {
+        x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
+      }
+    }
+  });
+}
 
 camera = new THREE.OrthographicCamera(
   -HALF_WINDOW_WIDTH,
@@ -167,19 +216,11 @@ function initPosition() {
 }
 
 // model移動相關
-startButtonElement.onclick = () => {
-  if (DeviceMotionEvent) {
-    window.addEventListener("deviceorientation", (event) => {
-      if (!isAutoMove && isGravityMove) {
-        if (event?.gamma) {
-          z = Number(event?.beta.toFixed(1)) * z_speed_percent;
-        }
-        if (event?.beta) {
-          x = Number(event?.gamma.toFixed(1)) * x_speed_percent;
-        }
-      }
-    });
-
+startButtonElement.onclick = async () => {
+  if (!isPermission) {
+    await getIOSOrientationPermission();
+  }
+  if (DeviceMotionEvent && isPermission) {
     isBegin = confirm("是否開始遊戲？");
     if (isBegin) {
       initPosition();
@@ -309,41 +350,24 @@ function getLoseGoal() {
   }
 }
 
-function displayLog() {
-  if (
-    DeviceMotionEvent &&
-    typeof DeviceMotionEvent.requestPermission === "function" &&
-    isBegin === true
-  ) {
-    document.getElementById("demo_x").innerHTML = `x = ${x.toFixed(1)}`;
-    document.getElementById("demo_z").innerHTML = `z = ${z.toFixed(1)}`;
-    document.getElementById(
-      "demo_cube_x"
-    ).innerHTML = `px=${gltfModel.position.x.toFixed(2)}`;
-    document.getElementById(
-      "demo_cube_z"
-    ).innerHTML = `pz=${gltfModel.position.z.toFixed(2)}`;
-    document.getElementById("countdown").innerHTML = `cd=${countdown}`;
-    document.getElementById(
-      "needAnimateChange"
-    ).innerHTML = `NAC=${needAnimateChange}`;
-  }
-}
-
 function animate() {
-  requestAnimationFrame(animate);
-  if (isBegin) {
-    displayLog();
-    fixedRotation();
-    if (isAutoMove) {
-      autoMove();
-      cancelAutoMove();
-    } else {
-      gravityMove();
-      getWinGoal();
-      getLoseGoal();
+  if (isMobile) {
+    if (isPermission) {
+      if (isBegin) {
+        fixedRotation();
+        if (isAutoMove) {
+          autoMove();
+          cancelAutoMove();
+        } else {
+          gravityMove();
+          getWinGoal();
+          getLoseGoal();
+        }
+      }
     }
   }
+
+  requestAnimationFrame(animate);
   const delta = clock.getDelta();
   if (mixer) mixer.update(delta);
   renderer.render(scene, camera);
