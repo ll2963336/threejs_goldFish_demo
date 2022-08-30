@@ -3,8 +3,9 @@ import * as THREE from "./three.js";
 import { GLTFLoader } from "./GLTFLoader.js";
 
 let isBegin = false;
+let isMobile = false;
 
-let camera, scene, renderer, stats;
+let camera, scene, renderer;
 
 let mixer, actions;
 
@@ -51,6 +52,32 @@ const startButtonElement = document.getElementById("start_button");
 
 win_score_container.value = win_score;
 lose_score_container.value = lose_score;
+
+// 檢測是否為移動端手機
+function getUseAgentDetection() {
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  ) {
+    isMobile = true;
+  } else {
+    isMobile = false;
+    startButtonElement.setAttribute("disabled", true);
+
+    $.toast({
+      heading: "Info",
+      text: "抱歉，請閣下使用移動端瀏覽器進行訪問 :(<br/>Android: Chrome 18*<br/>IOS: Safari 4.2*",
+      showHideTransition: "fade",
+      position: "mid-center",
+      stack: 1,
+      icon: "warning",
+      allowToastClose: false,
+      hideAfter: false,
+    });
+  }
+}
+getUseAgentDetection();
 
 camera = new THREE.OrthographicCamera(
   -HALF_WINDOW_WIDTH,
@@ -141,17 +168,7 @@ function initPosition() {
 
 // model移動相關
 startButtonElement.onclick = () => {
-  if (
-    DeviceMotionEvent &&
-    typeof DeviceMotionEvent.requestPermission === "function"
-    // true
-  ) {
-    isBegin = true;
-    initPosition();
-
-    DeviceMotionEvent.requestPermission();
-    startButtonElement.setAttribute("disabled", true);
-
+  if (DeviceMotionEvent) {
     window.addEventListener("deviceorientation", (event) => {
       if (!isAutoMove && isGravityMove) {
         if (event?.gamma) {
@@ -162,6 +179,21 @@ startButtonElement.onclick = () => {
         }
       }
     });
+
+    isBegin = confirm("是否開始遊戲？");
+    if (isBegin) {
+      initPosition();
+      startButtonElement.setAttribute("disabled", true);
+    } else {
+      $.toast({
+        heading: "Message",
+        text: "你取消了遊戲🎮：）",
+        showHideTransition: "slide",
+        position: "top-left",
+        stack: 1,
+        icon: "info",
+      });
+    }
   } else {
     startButtonElement.setAttribute("disabled", true);
     startButtonElement.innerText = "設備不支持";
