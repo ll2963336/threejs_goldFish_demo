@@ -65,6 +65,7 @@ lose_score_container.value = lose_score;
   } else {
     isMobile = false;
     startButtonElement.setAttribute("disabled", true);
+    return;
     $.toast({
       heading: "Info",
       text: "抱歉，請閣下使用移動端瀏覽器進行訪問 :(<br/>Android: Chrome 18*<br/>IOS: Safari 4.2*",
@@ -103,6 +104,7 @@ async function getIOSOrientationPermission() {
   if (isPermission) {
     addOrientationListener();
   } else {
+    return;
     $.toast({
       heading: "Message",
       text: "閣下拒絕本遊戲獲取重力感應數據請求：(",
@@ -230,6 +232,7 @@ startButtonElement.onclick = async () => {
       initPosition();
       startButtonElement.setAttribute("disabled", true);
     } else {
+      return;
       $.toast({
         heading: "Message",
         text: "你取消了遊戲🎮：）",
