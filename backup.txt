@@ -1,5 +1,5 @@
 "compact": true,
-"controlFlowFlattening": false,
+"controlFlowFlattening": true,
 "deadCodeInjection": false,
 "debugProtection": false,
 "disableConsoleOutput": false,
@@ -15,6 +15,16 @@
 "stringArrayCallsTransformThreshold": 0.5,
 "stringArrayEncoding": ["base64", "rc4"],
 "stringArrayIndexesType": ["hexadecimal-number"],
+"stringArrayIndexShift": true,
+"stringArrayRotate": true,
+"stringArrayShuffle": true,
+"stringArrayWrappersCount": 1,
+"stringArrayWrappersChainedCalls": true,
+"stringArrayWrappersParametersMaxCount": 2,
+"stringArrayWrappersType": "variable",
+"stringArrayThreshold": 0.75,
+"target": "browser",
+"unicodeEscapeSequence": false
 
 "optimizers": {
   "*.js": [
