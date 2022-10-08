@@ -5,6 +5,7 @@
   "source": "src/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel --https",
     "start": "parcel",
     "build": "parcel build"
   },
@@ -21,7 +22,15 @@
   "devDependencies": {
     "@parcel/optimizer-esbuild": "^2.7.0",
     "@rbf/parcel-optimizer-javascript-obfuscator": "^0.2.2",
-    "parcel": "^2.0.0"
+    "parcel": "^2.0.0",
+    "parcel-reporter-static-files-copy": "^1.4.0",
+    "postcss": "^8.0.9",
+    "tailwindcss": "^3.1.8"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8"
   },
   "homepage": "https://github.com/withcloud/threejs_goldFish_demo#readme"
 }
