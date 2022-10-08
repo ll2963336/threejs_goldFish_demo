@@ -412,7 +412,6 @@ const browser = {
   openObject: function () {
     var ua = navigator.userAgent
     var u = navigator.userAgent.toLowerCase();//获取判断用的对象
-    alert(u)
     return {
       weixin: u.match(/MicroMessenger/i) == "micromessenger",
       qq: u.match(/QQ/i) == "qq",
