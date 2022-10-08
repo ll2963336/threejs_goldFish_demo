@@ -53,7 +53,6 @@ const startButtonElement = document.getElementById("start_button");
 
 win_score_container.value = win_score;
 lose_score_container.value = lose_score;
-
 // 檢測是否為移動端手機
 (function getUseAgentDetection() {
   if (
@@ -61,20 +60,21 @@ lose_score_container.value = lose_score;
       navigator.userAgent
     )
   ) {
+
     isMobile = true;
   } else {
     isMobile = false;
     startButtonElement.setAttribute("disabled", true);
-    $.toast({
-      heading: "Info",
-      text: "抱歉，請閣下使用移動端瀏覽器進行訪問 :(<br/>Android: Chrome 18*<br/>IOS: Safari 4.2*",
-      showHideTransition: "fade",
-      position: "mid-center",
-      stack: 1,
-      icon: "warning",
-      allowToastClose: false,
-      hideAfter: false,
-    });
+    // $.toast({
+    //   heading: "Info",
+    //   text: "抱歉，請閣下使用移動端瀏覽器進行訪問 :(<br/>Android: Chrome 18*<br/>IOS: Safari 4.2*",
+    //   showHideTransition: "fade",
+    //   position: "mid-center",
+    //   stack: 1,
+    //   icon: "warning",
+    //   allowToastClose: false,
+    //   hideAfter: false,
+    // });
   }
 })();
 
@@ -379,3 +379,67 @@ function animate() {
 }
 
 animate();
+
+$('#logoModal').css('display', 'none')
+
+$('#openLogoModal').click(() => {
+  $('#logoModal').css('display', 'block')
+})
+
+$('#closeLogoModal').click(() => {
+  $('#logoModal').css('display', 'none')
+})
+
+const browser = {
+  // 版本信息
+  versions: function () {
+    var u = navigator.userAgent
+    var app = navigator.appVersion;
+    return {         //移动终端浏览器版本信息
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+      iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+      iPad: u.indexOf('iPad') > -1, //是否iPad
+      webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+    };
+  }(),
+  // 打開對象
+  openObject: function () {
+    var ua = navigator.userAgent
+    var u = navigator.userAgent.toLowerCase();//获取判断用的对象
+    return {
+      weixin: u.match(/MicroMessenger/i) == "micromessenger",
+      qq: u.match(/QQ/i) == "qq",
+      weibo: u.match(/WeiBo/i) == "weibo",
+      alipay: /alipay/ig.test(u),
+      dingtalk: u.indexOf('dingtalk') !== -1,
+      chrome: u.indexOf("Chrome") > -1,
+      isChrome: /(?:Chrome|CriOS)/.test(ua),
+      isSafari: /Safari/.test(ua),//蘋果內置瀏覽器  百度
+      baidui: u.indexOf("baidu") > 0,
+      ios: /iphone|ipod|ipad/.test(u)
+    }
+  }(),
+}
+
+window.addEventListener('pageshow', function (e) {
+  $('#copyUrl').attr('value', window.location.origin)//可複製的網址
+  // 移動端
+  if (/Android|Adr|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+    if (browser.versions.mobile) {
+      if (browser.openObject.weixin || browser.openObject.dingtal || browser.openObject.qq || browser.openObject.baidui) {
+
+        $('#copyLink').css('display', 'block')
+      }
+    }
+  } else {
+    // pc端
+    $('#copyLink').css('display', 'block')
+  }
+})

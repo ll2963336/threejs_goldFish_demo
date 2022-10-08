@@ -9,18 +9,50 @@
       id="viewport"
       name="viewport"
     />
+    <link href="index.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/common.css" type="text/css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
       type="text/css"
     />
+   
   </head>
   <body>
+    <!-- 頭像logo -->
+    <div style="position: fixed; left: 2; top: 2; z-index: 9999;">
+      <img src="../logo.png" width="50px" height="50px" style="border-radius: 50%; margin: 10px;" id="openLogoModal" />
+    </div>
+
+    <div id="logoModal" style="display: none;  z-index: 9999;" class="relative " >
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div
+          class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
+        >
+          <div
+            class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+          >
+            <div>
+              <div style="display: flex; justify-content: center; ">
+                <img src="../logo.png"  style="border-radius: 50%; width: 50px;height: 50px;" />
+              </div>
+              <h1 style="text-align: center;">地域科技</h1>
+              <p style="padding: 5px; text-indent: 15; line-height: 20px; font-size: 16px;">地域蛋糕-專門製作各種蛋糕：javascript蛋糕、react蛋糕、nodejs蛋糕應有盡有。</p>
+              <div style="display: flex; justify-content: space-around;">
+                <button type="button" style="border: none; background: none;"><a style="text-decoration: none; font-size: 16px;" href='https://region.mo/'>前往官方網站</a></button>
+                <button type="button" style="border: none; background: none;font-size: 16px;" id="closeLogoModal">關閉</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
     <!-- three相關 -->
-    <div id="first_container" class="first_container">
+    <div id="first_container" class="first_container ">
       <button id="start_button" class="start_button">開始</button>
     </div>
+  
     <!-- 得分、座標顯示相關 -->
     <div id="scecond_container" class="scecond_container">
       <div id="fishing_net_cubeCenter" class="fishing_net_cubeCenter"></div>
