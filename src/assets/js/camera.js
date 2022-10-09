@@ -52,5 +52,8 @@ navigator.mediaDevices
     };
   })
   .catch(function (err) {
+    if (err.message == "Permission denied") {
+      $('#cameraReject').css('display', 'block');
+    }
     console.log(err.name + ": " + err.message);
   });
