@@ -4,3 +4,4 @@ node_modules
 .pnp.js
 .DS_Store
 .vercel
+dist
